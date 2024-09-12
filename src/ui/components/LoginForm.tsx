@@ -1,6 +1,5 @@
 "use client"; // Mark this component as a Client Component
 
-
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation"; // Import the useRouter hook from next/navigation
 
@@ -11,6 +10,9 @@ export function LoginForm() {
 	const [otpSent, setOtpSent] = useState(false); // To track if OTP is sent
 	const [loading, setLoading] = useState(false); // To track the loading state
 	const [isLoggedIn, setIsLoggedIn] = useState(false); // To track login status
+	const [username, setUsername] = useState(""); // Store the username from the profile
+	const [userId, setUserId] = useState(""); // Store the userId from the profile
+	const [phone_number_profile, setPhone_number_profile] = useState(""); // Store the phone number from the profile
 	const router = useRouter(); // Initialize the Next.js router
 
 	// Function to check if the user is already logged in
@@ -18,14 +20,50 @@ export function LoginForm() {
 		const kgenAccessToken = localStorage.getItem("kgen_accessToken");
 		const saleorAccessToken = localStorage.getItem("saleor_accessToken");
 
-		// If both tokens exist, mark the user as logged in
+		console.log("kgenAccessToken: ", kgenAccessToken); // Debugging token
+
+		// If both tokens exist, mark the user as logged in and fetch profile
 		if (kgenAccessToken && saleorAccessToken) {
+			console.log("User is logged in. Fetching profile...");
 			setIsLoggedIn(true);
+			// Fetch the user profile details
+			fetchUserProfile(kgenAccessToken);
 		}
 	}, []);
 
+	// Function to fetch the user profile details
+	const fetchUserProfile = async (accessToken: string) => {
+		try {
+			console.log("Calling profile API with token:", accessToken); // Debugging API call
+			const response = await fetch('https://stage-api-backend.kgen.io/users/me/profile', {
+				method: 'GET',
+				headers: {
+					accept: 'application/json',
+					Authorization: `Bearer ${accessToken}`, // Use the kgen_accessToken
+				},
+			});
+
+			if (!response.ok) {
+				throw new Error(`Failed to fetch profile. Status code: ${response.status}`);
+			}
+
+			const data = await response.json();
+			console.log("Profile API response:", data); // Debugging response
+
+			// Extract and set the username and userId from the profile response
+			if (data) {
+				setUsername(data.username);
+				setUserId(data.userId);
+				setPhone_number_profile(data.phone_number);
+			}
+		} catch (error) {
+			console.error("Error fetching profile:", error);
+		}
+	};
+
 	// Function to log out the user
 	const logout = () => {
+		console.log("Logging out..."); // Debugging logout
 		localStorage.removeItem("kgen_accessToken");
 		localStorage.removeItem("kgen_refreshhToken");
 		localStorage.removeItem("saleor_accessToken");
@@ -58,7 +96,6 @@ export function LoginForm() {
 				setAuthCode(data.authCode);
 				setOtpSent(true); // OTP is sent, now show OTP input
 				accountRegister(`${phoneNumber}@email.com`, "password");
-				
 			} else {
 				console.error("Error requesting OTP:", data);
 			}
@@ -95,7 +132,6 @@ export function LoginForm() {
 				// Step 2: After OTP verification, try to log in or register if needed
 				await registerAndSignIn(`${phoneNumber}@email.com`, "password", data.accessToken, data.refreshToken);
 				router.push("/default-channel");
-				
 			} else {
 				console.error("Error verifying OTP:", data);
 			}
@@ -112,6 +148,9 @@ export function LoginForm() {
 			<div className="mx-auto mt-16 w-full max-w-lg">
 				<div className="rounded border p-8 shadow-md">
 					<h2 className="text-xl font-semibold">You are already logged in!</h2>
+					{username && <p className="mt-2">Username: {username}</p>}
+					{userId && <p className="mt-2">User ID: {userId}</p>}
+					{phone_number_profile && <p className="mt-2">Phone Number: {phone_number_profile}</p>}
 					<button
 						className="mt-4 rounded bg-red-600 px-4 py-2 text-white hover:bg-red-500"
 						onClick={logout}
