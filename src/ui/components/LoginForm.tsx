@@ -36,10 +36,10 @@ export function LoginForm() {
 	const fetchUserProfile = async (accessToken: string) => {
 		try {
 			console.log("Calling profile API with token:", accessToken); // Debugging API call
-			const response = await fetch('https://stage-api-backend.kgen.io/users/me/profile', {
-				method: 'GET',
+			const response = await fetch("https://stage-api-backend.kgen.io/users/me/profile", {
+				method: "GET",
 				headers: {
-					accept: 'application/json',
+					accept: "application/json",
 					Authorization: `Bearer ${accessToken}`, // Use the kgen_accessToken
 				},
 			});
@@ -82,15 +82,15 @@ export function LoginForm() {
 		setLoading(true);
 
 		try {
-			const response = await fetch('https://stage-api-backend.kgen.io/authentication/register', {
-				method: 'POST',
+			const response = await fetch("https://stage-api-backend.kgen.io/authentication/register", {
+				method: "POST",
 				headers: {
-					'Content-Type': 'application/json',
-					'accept': '*/*',
+					"Content-Type": "application/json",
+					accept: "*/*",
 				},
 				body: JSON.stringify({
 					phone_number: phoneNumber,
-					countryCode: '+91', // Update this to be dynamic if needed
+					countryCode: "+91", // Update this to be dynamic if needed
 				}),
 			});
 
@@ -116,15 +116,15 @@ export function LoginForm() {
 		setLoading(true);
 
 		try {
-			const response = await fetch('https://stage-api-backend.kgen.io/authentication/verify', {
-				method: 'POST',
+			const response = await fetch("https://stage-api-backend.kgen.io/authentication/verify", {
+				method: "POST",
 				headers: {
-					'Content-Type': 'application/json',
-					'accept': '*/*',
+					"Content-Type": "application/json",
+					accept: "*/*",
 				},
 				body: JSON.stringify({
 					phone_number: phoneNumber,
-					countryCode: '+91',
+					countryCode: "+91",
 					authCode: parseInt(authCode), // Use the stored authCode from the OTP request
 					otp: parseInt(otp),
 				}),
@@ -155,10 +155,7 @@ export function LoginForm() {
 					{username && <p className="mt-2">Username: {username}</p>}
 					{userId && <p className="mt-2">User ID: {userId}</p>}
 					{phone_number_profile && <p className="mt-2">Phone Number: {phone_number_profile}</p>}
-					<button
-						className="mt-4 rounded bg-red-600 px-4 py-2 text-white hover:bg-red-500"
-						onClick={logout}
-					>
+					<button className="mt-4 rounded bg-red-600 px-4 py-2 text-white hover:bg-red-500" onClick={logout}>
 						Logout
 					</button>
 				</div>
@@ -171,7 +168,9 @@ export function LoginForm() {
 		<div className="mx-auto mt-16 w-full max-w-lg">
 			<form className="rounded border p-8 shadow-md" onSubmit={requestOtp}>
 				<div className="mb-4">
-					<label className="sr-only" htmlFor="phoneNumber">Phone Number</label>
+					<label className="sr-only" htmlFor="phoneNumber">
+						Phone Number
+					</label>
 					<input
 						type="tel"
 						name="phoneNumber"
@@ -192,9 +191,11 @@ export function LoginForm() {
 			</form>
 
 			{otpSent && (
-				<form className="rounded border p-8 shadow-md mt-8" onSubmit={verifyOtpAndSignIn}>
+				<form className="mt-8 rounded border p-8 shadow-md" onSubmit={verifyOtpAndSignIn}>
 					<div className="mb-4">
-						<label className="sr-only" htmlFor="otp">OTP</label>
+						<label className="sr-only" htmlFor="otp">
+							OTP
+						</label>
 						<input
 							type="text"
 							name="otp"
@@ -218,7 +219,6 @@ export function LoginForm() {
 	);
 }
 
-
 // Function to register an account and then sign in
 async function registerAndSignIn(email: string, password: string, accessToken: string, refreshToken: string) {
 	const tokenCreateMutation = `
@@ -236,10 +236,10 @@ async function registerAndSignIn(email: string, password: string, accessToken: s
 
 	try {
 		// Step 1: Try logging in with tokenCreate mutation
-		let response = await fetch('http://localhost:8000/graphql/', {
-			method: 'POST',
+		let response = await fetch(process.env.BASE_API_URL, {
+			method: "POST",
 			headers: {
-				'Content-Type': 'application/json',
+				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({ query: tokenCreateMutation }),
 		});
@@ -247,25 +247,29 @@ async function registerAndSignIn(email: string, password: string, accessToken: s
 		// console.log(' login function call data:', data);
 
 		let result = await response.json();
-		console.log('first attempt loging in response:', result);
+		console.log("first attempt loging in response:", result);
 
 		if (result.data.tokenCreate.token) {
 			localStorage.setItem("kgen_accessToken", accessToken);
 			localStorage.setItem("kgen_refreshhToken", refreshToken);
 			localStorage.setItem("saleor_accessToken", result.data.tokenCreate.token);
 			localStorage.setItem("saleor_refreshToken", result.data.tokenCreate.refreshToken);
-			console.log('User logged in successfully:', result.data.tokenCreate.token);
-			localStorage.setItem("http://localhost:8000/graphql/+saleor_auth_module_refresh_token", result.data.tokenCreate.refreshToken);
-			localStorage.setItem("http://localhost:8000/graphql/+saleor_auth_module_auth_state", "signedIn");
+			console.log("User logged in successfully:", result.data.tokenCreate.token);
+			localStorage.setItem(
+				`${process.env.BASE_API_URL}+saleor_auth_module_refresh_token`,
+				result.data.tokenCreate.refreshToken,
+			);
+			localStorage.setItem(`${process.env.BASE_API_URL}+saleor_auth_module_auth_state`, "signedIn");
 			localStorage.setItem("email", email);
 			// Set email in cookie with an expiration date of 7 days
-			document.cookie = `email=${email}; path=/; expires=${new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString()}`;
-
+			document.cookie = `email=${email}; path=/; expires=${new Date(
+				Date.now() + 7 * 24 * 60 * 60 * 1000,
+			).toUTCString()}`;
 		} else {
-			console.error('Login or registration failed:', result.data.tokenCreate.errors);
+			console.error("Login or registration failed:", result.data.tokenCreate.errors);
 		}
 	} catch (error) {
-		console.error('Error during login or registration:', error);
+		console.error("Error during login or registration:", error);
 	}
 }
 
@@ -294,24 +298,24 @@ async function accountRegister(email: string, password: string) {
 	`;
 
 	try {
-		const registerResponse = await fetch('http://localhost:8000/graphql/', {
-			method: 'POST',
+		const registerResponse = await fetch(process.env.BASE_API_URL, {
+			method: "POST",
 			headers: {
-				'Content-Type': 'application/json',
+				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({ query: registerMutation }),
 		});
 
 		const registerResult = await registerResponse.json();
-		console.log('Account registration response:', registerResult);
+		console.log("Account registration response:", registerResult);
 
 		if (registerResult.data.accountRegister.errors.length > 0) {
-			console.error('Registration errors:', registerResult.data.accountRegister.errors);
+			console.error("Registration errors:", registerResult.data.accountRegister.errors);
 			return;
 		}
 
-		console.log('Account registered successfully:', registerResult.data.accountRegister.user);
+		console.log("Account registered successfully:", registerResult.data.accountRegister.user);
 	} catch (error) {
-		console.error('Error during account registration:', error);
+		console.error("Error during account registration:", error);
 	}
 }
