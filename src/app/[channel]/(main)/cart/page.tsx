@@ -11,8 +11,10 @@ export const metadata = {
 
 export default async function Page({ params }: { params: { channel: string } }) {
 	const checkoutId = Checkout.getIdFromCookies(params.channel);
+	console.log("checkoutId:", checkoutId);
 
 	const checkout = await Checkout.find(checkoutId);
+	console.log("checkout in cart:", checkout);
 
 	if (!checkout || checkout.lines.length < 1) {
 		return (

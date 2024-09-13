@@ -36,12 +36,17 @@ export async function find(checkoutId: string) {
 }
 
 export async function findOrCreate({ channel, checkoutId }: { checkoutId?: string; channel: string }) {
+	const cookieStore = cookies();
+	const email = cookieStore.get("email")?.value || ""; // Retrieve email from server-side cookies
+	console.log("email", email);
 	if (!checkoutId) {
-		return (await create({ channel })).checkoutCreate?.checkout;
+		return (await create({ channel, email })).checkoutCreate?.checkout;
 	}
 	const checkout = await find(checkoutId);
-	return checkout || (await create({ channel })).checkoutCreate?.checkout;
+	return checkout || (await create({ channel, email })).checkoutCreate?.checkout;
 }
 
-export const create = ({ channel }: { channel: string }) =>
-	executeGraphQL(CheckoutCreateDocument, { cache: "no-cache", variables: { channel } });
+export const create = ({ channel , email}: { channel: string, email: string }) =>
+	executeGraphQL(CheckoutCreateDocument, { cache: "no-cache", variables: { channel , email} });
+
+

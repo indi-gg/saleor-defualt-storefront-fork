@@ -108,7 +108,7 @@ export default async function Page({
 			channel: params.channel,
 		});
 		invariant(checkout, "This should never happen");
-
+		console.log("checkout adding item:", checkout);
 		Checkout.saveIdToCookie(params.channel, checkout.id);
 
 		if (!selectedVariantID) {

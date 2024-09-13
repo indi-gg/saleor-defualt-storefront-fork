@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation"; // Import the useRouter hook from next/navigation
+import { getServerAuthClient } from "@/app/config";
 
 export function LoginForm() {
 	const [phoneNumber, setPhoneNumber] = useState("");
@@ -68,6 +69,9 @@ export function LoginForm() {
 		localStorage.removeItem("kgen_refreshhToken");
 		localStorage.removeItem("saleor_accessToken");
 		localStorage.removeItem("saleor_refreshToken");
+		// To remove the cookie
+		document.cookie = "email=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+
 		setIsLoggedIn(false); // Update the state
 		router.push("/"); // Redirect to the homepage or login screen after logging out
 	};
@@ -239,6 +243,8 @@ async function registerAndSignIn(email: string, password: string, accessToken: s
 			},
 			body: JSON.stringify({ query: tokenCreateMutation }),
 		});
+		// const { data } = await getServerAuthClient().signIn({ email, password }, { cache: "no-store" });
+		// console.log(' login function call data:', data);
 
 		let result = await response.json();
 		console.log('first attempt loging in response:', result);
@@ -249,6 +255,11 @@ async function registerAndSignIn(email: string, password: string, accessToken: s
 			localStorage.setItem("saleor_accessToken", result.data.tokenCreate.token);
 			localStorage.setItem("saleor_refreshToken", result.data.tokenCreate.refreshToken);
 			console.log('User logged in successfully:', result.data.tokenCreate.token);
+			localStorage.setItem("http://localhost:8000/graphql/+saleor_auth_module_refresh_token", result.data.tokenCreate.refreshToken);
+			localStorage.setItem("http://localhost:8000/graphql/+saleor_auth_module_auth_state", "signedIn");
+			localStorage.setItem("email", email);
+			// Set email in cookie with an expiration date of 7 days
+			document.cookie = `email=${email}; path=/; expires=${new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString()}`;
 
 		} else {
 			console.error('Login or registration failed:', result.data.tokenCreate.errors);
