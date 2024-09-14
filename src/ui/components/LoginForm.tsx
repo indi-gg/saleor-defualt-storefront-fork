@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation"; // Import the useRouter hook from next/navigation
 import { getServerAuthClient } from "@/app/config";
+import WalletInfo from "./nav/walletInfo";
 
 export function LoginForm() {
 	const [phoneNumber, setPhoneNumber] = useState("");
@@ -155,6 +156,7 @@ export function LoginForm() {
 					{username && <p className="mt-2">Username: {username}</p>}
 					{userId && <p className="mt-2">User ID: {userId}</p>}
 					{phone_number_profile && <p className="mt-2">Phone Number: {phone_number_profile}</p>}
+					<WalletInfo />
 					<button className="mt-4 rounded bg-red-600 px-4 py-2 text-white hover:bg-red-500" onClick={logout}>
 						Logout
 					</button>

@@ -86,11 +86,6 @@ export default async function Page({ params }: { params: { channel: string } }) 
 				</ul>
 
 				<div className="mt-6">
-					<div className="mb-6 rounded border bg-neutral-50 px-4 py-2">
-						<div className="flex items-center justify-between gap-2 py-2">
-							<EvaluationBox checkOutData={checkout} />
-						</div>
-					</div>
 					<div className="rounded border bg-neutral-50 px-4 py-2">
 						<div className="flex items-center justify-between gap-2 py-2">
 							<div>
