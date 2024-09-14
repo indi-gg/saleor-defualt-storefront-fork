@@ -41,3 +41,9 @@ export function getHrefForVariant({
 	const query = new URLSearchParams({ variant: variantId });
 	return `${pathname}?${query.toString()}`;
 }
+
+export const generateUniqueId = () => {
+	const timestamp = Date.now();
+	const randomNum = Math.floor(Math.random() * 1000000);
+	return `${timestamp}-${randomNum}`;
+};

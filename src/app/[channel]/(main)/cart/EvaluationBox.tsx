@@ -1,11 +1,6 @@
 "use client";
+import { generateUniqueId } from "@/lib/utils";
 import React, { useEffect, useMemo, useState } from "react";
-
-const generateUniqueId = () => {
-	const timestamp = Date.now();
-	const randomNum = Math.floor(Math.random() * 1000000);
-	return `${timestamp}-${randomNum}`;
-};
 
 const getEvalPayLoad = (referenceId: string, checkOutData: any) => {
 	const data = {
