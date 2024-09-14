@@ -70,36 +70,73 @@ const EvaluationBox = ({ checkOutData }: any) => {
 			return <></>;
 		}
 		return productData?.products?.map(({ metadata, price_with_gst, gst_percent }: any) => {
+			console.log(JSON.stringify(productData));
 			return (
-				<div className="w-full">
-					<div className="flex gap-2">
-						<div>Product Name :</div> {metadata?.name}
+				<div className="w-full p-4 border rounded-md shadow-sm" key={metadata?.name}>
+					<div className="flex items-center gap-4">
+						{/* Display Product Image */}
+						{metadata?.image_url && (
+							<img
+								src={metadata.image_url}
+								alt={metadata?.name}
+								className="w-24 h-24 object-cover rounded-md" // Image size
+							/>
+						)}
+	
+						{/* Display Product Details (Name and Price) */}
+						<div className="flex-1">
+							<div className="flex flex-col">
+								{/* Product Name */}
+								<div className="text-lg font-semibold">
+									Product Name: {metadata?.name}
+								</div>
+	
+								{/* Product Price */}
+								<div className="text-gray-600 mt-2">
+									Price: {price_with_gst} K-Cash
+								</div>
+							</div>
+						</div>
 					</div>
-					<div className="ml-40 flex w-full justify-end gap-2 text-gray-600">
-						<div>Price :</div> {price_with_gst}
-					</div>
-					{/* <div className="ml-40 flex w-full justify-end gap-2 text-gray-600">
-						<div>gst_percent :</div> {gst_percent}
-					</div> */}
 				</div>
 			);
 		});
 	}, [productData]);
+	
+	
+	
 
 	return (
 		<div className="max-w-7xl">
 			{loading && <Loading />}
 			{RenderProductData}
-			<h2 className="mt-8 w-full border-t-2 border-gray-200 pt-4 font-medium text-neutral-700">
-				K-Cash Needed Without Tax : {base_kcash_amount || "..."}
-			</h2>
-			<h2 className="mt-2 w-full  border-gray-200 font-medium text-neutral-600">
-				K-Cash User Needs to Purchase : {kcash_to_purchase}
-			</h2>
-			<h2 className="mt-2 w-full  border-gray-200  font-medium text-neutral-600">
-				Total K-Cash needed including Tax : {total_kcash_required || "..."}
-			</h2>
-			<h2 className="mt-2 w-full  border-gray-200  font-medium text-neutral-600">tax : {tax}</h2>
+			
+			{/* Flex container to align keys and values */}
+			<div className="mt-8 w-full border-t-2 border-gray-200 pt-4 font-medium text-neutral-700">
+				<div className="flex justify-between">
+					<span>Total Price (excluding Tax):</span>
+					<span>{base_kcash_amount || "..."} K-Cash</span>
+				</div>
+			</div>
+			<div className="mt-2 w-full font-medium text-neutral-600">
+				<div className="flex justify-between">
+					<span>Total K-Cash User Needs to Purchase:</span>
+					<span>{kcash_to_purchase} K-Cash</span>
+				</div>
+			</div>
+			<div className="mt-2 w-full font-medium text-neutral-600">
+				<div className="flex justify-between">
+					<span>Total Price (including Tax):</span>
+					<span>{total_kcash_required || "..."} K-Cash</span>
+				</div>
+			</div>
+			<div className="mt-2 w-full font-medium text-neutral-600">
+				<div className="flex justify-between">
+					<span>Total Tax:</span>
+					<span>{tax} K-Cash</span>
+				</div>
+			</div>
+	
 			<div className="mt-6 w-full">
 				{kCashData ? (
 					<button
@@ -112,7 +149,6 @@ const EvaluationBox = ({ checkOutData }: any) => {
 									router.push("/default-channel/purchased-successfull");
 								}
 							});
-							// submitProduct(referenceId, kgenAccessToken);
 						}}
 						className="rounded-sm bg-gray-800 p-2 text-white"
 					>

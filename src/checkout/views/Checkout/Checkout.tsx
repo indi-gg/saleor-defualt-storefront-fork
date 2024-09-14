@@ -31,7 +31,7 @@ export const Checkout = () => {
 				) : (
 					<div className="grid min-h-screen grid-cols-1 gap-x-16 lg:grid-cols-2">
 						<Suspense fallback={<CheckoutFormSkeleton />}>
-							<CheckoutForm />
+							{/* <CheckoutForm /> */}
 						</Suspense>
 						<Suspense fallback={<SummarySkeleton />}>
 							{/* <Summary {...checkout} /> */}
