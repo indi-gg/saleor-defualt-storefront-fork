@@ -2,11 +2,14 @@ export const formatDate = (date: Date | number) => {
 	return new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(date);
 };
 
-export const formatMoney = (amount: number, currency: string) =>
-	new Intl.NumberFormat("en-US", {
-		style: "currency",
-		currency,
-	}).format(amount);
+
+export const formatMoney = (amount: number, currency: string) => {
+	return `${amount.toFixed(2)} K-Cash`;
+//     return new Intl.NumberFormat("en-US", {
+//         style: "currency",
+//         currency,
+//     }).format(amount);
+};
 
 export const formatMoneyRange = (
 	range: {

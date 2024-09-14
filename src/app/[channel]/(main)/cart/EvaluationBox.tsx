@@ -76,11 +76,11 @@ const EvaluationBox = ({ checkOutData }: any) => {
 						<div>Product Name :</div> {metadata?.name}
 					</div>
 					<div className="ml-40 flex w-full justify-end gap-2 text-gray-600">
-						<div>price_with_gst :</div> {price_with_gst}
+						<div>Price :</div> {price_with_gst}
 					</div>
-					<div className="ml-40 flex w-full justify-end gap-2 text-gray-600">
+					{/* <div className="ml-40 flex w-full justify-end gap-2 text-gray-600">
 						<div>gst_percent :</div> {gst_percent}
-					</div>
+					</div> */}
 				</div>
 			);
 		});
@@ -91,13 +91,13 @@ const EvaluationBox = ({ checkOutData }: any) => {
 			{loading && <Loading />}
 			{RenderProductData}
 			<h2 className="mt-8 w-full border-t-2 border-gray-200 pt-4 font-medium text-neutral-700">
-				base_kcash_amount : {base_kcash_amount || "..."}
+				K-Cash Needed Without Tax : {base_kcash_amount || "..."}
 			</h2>
 			<h2 className="mt-2 w-full  border-gray-200 font-medium text-neutral-600">
-				kcash_to_purchase : {kcash_to_purchase}
+				K-Cash User Needs to Purchase : {kcash_to_purchase}
 			</h2>
 			<h2 className="mt-2 w-full  border-gray-200  font-medium text-neutral-600">
-				total_kcash_required : {total_kcash_required || "..."}
+				Total K-Cash needed including Tax : {total_kcash_required || "..."}
 			</h2>
 			<h2 className="mt-2 w-full  border-gray-200  font-medium text-neutral-600">tax : {tax}</h2>
 			<div className="mt-6 w-full">
@@ -105,6 +105,7 @@ const EvaluationBox = ({ checkOutData }: any) => {
 					<button
 						onClick={() => {
 							setLoading(true);
+							submitProduct(referenceId, kgenAccessToken);
 							const purchasedData = confirmPurchaseSaleor(checkoutId, saleorAccessToken);
 							purchasedData?.then((data) => {
 								if (data) {
