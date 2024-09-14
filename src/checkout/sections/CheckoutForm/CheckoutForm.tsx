@@ -43,11 +43,6 @@ export const CheckoutForm = () => {
 					<Suspense fallback={<DeliveryMethodsSkeleton />}>
 						<DeliveryMethods collapsed={showOnlyContact} />
 					</Suspense>
-					<Suspense fallback={<PaymentSectionSkeleton />}>
-						<CollapseSection collapse={showOnlyContact}>
-							<PaymentSection />
-						</CollapseSection>
-					</Suspense>
 				</>
 			</div>
 		</div>

@@ -4,6 +4,7 @@ import { DeleteLineButton } from "./DeleteLineButton";
 import * as Checkout from "@/lib/checkout";
 import { formatMoney, getHrefForVariant } from "@/lib/utils";
 import { LinkWithChannel } from "@/ui/atoms/LinkWithChannel";
+import EvaluationBox from "./EvaluationBox";
 
 export const metadata = {
 	title: "Shopping Cart · Saleor Storefront example",
@@ -84,7 +85,7 @@ export default async function Page({ params }: { params: { channel: string } }) 
 					))}
 				</ul>
 
-				<div className="mt-12">
+				<div className="mt-6">
 					<div className="rounded border bg-neutral-50 px-4 py-2">
 						<div className="flex items-center justify-between gap-2 py-2">
 							<div>

@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const config = {
+	env: {
+		BASE_API_URL: "https://store-ipwvwuo6.saleor.cloud/graphql/",
+	},
 	images: {
 		remotePatterns: [
 			{
@@ -15,8 +18,8 @@ const config = {
 		process.env.NEXT_OUTPUT === "standalone"
 			? "standalone"
 			: process.env.NEXT_OUTPUT === "export"
-			  ? "export"
-			  : undefined,
+				? "export"
+				: undefined,
 };
 
 export default config;
