@@ -7,6 +7,7 @@ import { Summary, SummarySkeleton } from "@/checkout/sections/Summary";
 import { CheckoutForm, CheckoutFormSkeleton } from "@/checkout/sections/CheckoutForm";
 import { useCheckout } from "@/checkout/hooks/useCheckout";
 import { CheckoutSkeleton } from "@/checkout/views/Checkout/CheckoutSkeleton";
+import EvaluationBox from "@/app/[channel]/(main)/cart/EvaluationBox";
 
 export const Checkout = () => {
 	const { checkout, fetching: fetchingCheckout } = useCheckout();
@@ -30,10 +31,15 @@ export const Checkout = () => {
 				) : (
 					<div className="grid min-h-screen grid-cols-1 gap-x-16 lg:grid-cols-2">
 						<Suspense fallback={<CheckoutFormSkeleton />}>
-							<CheckoutForm />
+							{/* <CheckoutForm /> */}
 						</Suspense>
 						<Suspense fallback={<SummarySkeleton />}>
-							<Summary {...checkout} />
+							{/* <Summary {...checkout} /> */}
+							<div className="mb-6 rounded border bg-neutral-50 px-4 py-2">
+								<div className="flex items-center justify-between gap-2 py-2">
+									<EvaluationBox checkOutData={checkout} />
+								</div>
+							</div>
 						</Suspense>
 					</div>
 				)}

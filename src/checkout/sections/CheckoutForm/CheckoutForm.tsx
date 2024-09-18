@@ -26,7 +26,7 @@ export const CheckoutForm = () => {
 		<div className="flex flex-col items-end">
 			<div className="flex w-full flex-col rounded">
 				<Suspense fallback={<ContactSkeleton />}>
-					<Contact setShowOnlyContact={setShowOnlyContact} />
+					{/* <Contact setShowOnlyContact={setShowOnlyContact} /> */}
 				</Suspense>
 				<>
 					{checkout?.isShippingRequired && (
@@ -42,11 +42,6 @@ export const CheckoutForm = () => {
 					)}
 					<Suspense fallback={<DeliveryMethodsSkeleton />}>
 						<DeliveryMethods collapsed={showOnlyContact} />
-					</Suspense>
-					<Suspense fallback={<PaymentSectionSkeleton />}>
-						<CollapseSection collapse={showOnlyContact}>
-							<PaymentSection />
-						</CollapseSection>
 					</Suspense>
 				</>
 			</div>

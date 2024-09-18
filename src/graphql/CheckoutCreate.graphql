@@ -1,5 +1,10 @@
-mutation CheckoutCreate($channel: String!) {
-	checkoutCreate(input: { channel: $channel, lines: [] }) {
+mutation CheckoutCreate($channel: String!, $email: String!) {
+	checkoutCreate(input: { channel: $channel, lines: [] , email: $email, shippingAddress: { country: US }
+      billingAddress: { postalCode: "XX-YYY", country: US }
+      validationRules: {
+        shippingAddress: { checkRequiredFields: false }
+        billingAddress: { checkRequiredFields: false, checkFieldsFormat: false }
+      }}) {
 		checkout {
 			id
 			email

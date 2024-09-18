@@ -28,6 +28,9 @@ export default function CheckoutPage({
 
 				<section className="mb-12 mt-6 flex-1">
 					<RootWrapper saleorApiUrl={process.env.NEXT_PUBLIC_SALEOR_API_URL} />
+					<div className="mb-6 rounded border bg-neutral-50 px-4 py-2">
+						<div className="flex items-center justify-between gap-2 py-2"></div>
+					</div>
 				</section>
 			</section>
 		</div>
